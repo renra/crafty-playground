@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Crafty Playground</title>
+    <style type="text/css">
+      body {
+        overflow:hidden;
+      }
+
+      div#messagePane {
+        height: 30px;
+      }
+
+      div.green {
+        color: green;
+      }
+
+      div.red {
+        color: red;
+      }
+    </style>
+
+    <script src="js/crafty.js"></script>
+    <script src="js/jquery-2.2.0.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Bouncing ball in a box</h1>
+
+    <div id="messagePane">
+    </div>
+
+    <div id="game"></div>
+
+    <div>
+      Powered by <a href="http://craftyjs.com">Crafty</a>
+    </div>
+
+    <script type="text/javascript">
+      var height = window.innerHeight / 2,
+          width = window.innerWidth / 2,
+          borderWidth = 4,
+          ballSpeed = 80;
+
+      Crafty.log('Height', height);
+      Crafty.log('Width', width);
+
+      Crafty.init(width, height, document.getElementById('game'));
+
+      Crafty.e('HorizontalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: 0, y: 0, w: width, h: borderWidth})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.y > 0 ? velo.y = -ballSpeed : velo.y = ballSpeed;
+        });
+
+      Crafty.e('HorizontalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: 0, y: height - borderWidth, w: width, h: borderWidth})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.y > 0 ? velo.y = -ballSpeed : velo.y = ballSpeed;
+        });
+
+      Crafty.e('VerticalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: 0, y: 0, w: borderWidth, h: height})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.x > 0 ? velo.x = -ballSpeed : velo.x = ballSpeed;
+        });
+
+      Crafty.e('VerticalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: (width - borderWidth), y: 0, w: borderWidth, h: height})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.x > 0 ? velo.x = -ballSpeed : velo.x = ballSpeed;
+        });
+
+      var box = Crafty.e('Ball, 2D, DOM, Color, Motion')
+        .attr({x: 20, y: 20, w: 20, h: 20})
+        .color('blue');
+
+      var vel = box.velocity();
+      vel.x = ballSpeed;
+      vel.y = ballSpeed;
+
+      function printMessage(message, color, cb) {
+        var pane = document.getElementById('messagePane'),
+            messageElement = document.createElement('div');
+
+        if(typeof cb !== 'function') cb = function(){};
+
+        messageElement.innerHTML = message;
+        pane.appendChild(messageElement);
+
+        $(messageElement).addClass(color);
+        $(messageElement).fadeOut(10000, cb)
+      }
+
+      $(document).ready(function(){
+        setTimeout(function(){
+          printMessage("Hey. It's not a ball. It's a freaking square!", 'red', function(){
+            printMessage("I know, I know. There's room for improvement.", 'green');
+          });
+        }, 5000);
+      });
+    </script>
+  </body>
+</html>

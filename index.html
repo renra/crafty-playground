@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Crafty Playground</title>
+    <style type="text/css">
+      body {
+        overflow:hidden;
+        }
+    </style>
+
+    <script src="js/crafty.js"></script>
+  </head>
+
+  <body>
+    <h1>Crafty Playground</h1>
+
+    <div id="game"></div>
+
+    <script type="text/javascript">
+      var height = window.innerHeight / 2,
+          width = window.innerWidth / 2,
+          borderWidth = 4,
+          ballSpeed = 80;
+
+      Crafty.log('Height', height);
+      Crafty.log('Width', width);
+
+      Crafty.init(width, height, document.getElementById('game'));
+
+      Crafty.e('HorizontalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: 0, y: 0, w: width, h: borderWidth})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.y > 0 ? velo.y = -ballSpeed : velo.y = ballSpeed;
+        });
+
+      Crafty.e('HorizontalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: 0, y: height - borderWidth, w: width, h: borderWidth})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.y > 0 ? velo.y = -ballSpeed : velo.y = ballSpeed;
+        });
+
+      Crafty.e('VerticalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: 0, y: 0, w: borderWidth, h: height})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.x > 0 ? velo.x = -ballSpeed : velo.x = ballSpeed;
+        });
+
+      Crafty.e('VerticalBoundary, 2D, Canvas, Color, Collision')
+        .attr({x: (width - borderWidth), y: 0, w: borderWidth, h: height})
+        .color('brown')
+        .checkHits('Ball')
+        .bind('HitOn', function(data){
+          var velo = data[0].obj.velocity();
+          velo.x > 0 ? velo.x = -ballSpeed : velo.x = ballSpeed;
+        });
+
+      var box = Crafty.e('Ball, 2D, DOM, Color, Motion')
+        .attr({x: 20, y: 20, w: 20, h: 20})
+        .color('blue');
+
+      var vel = box.velocity();
+      vel.x = ballSpeed;
+      vel.y = ballSpeed;
+
+      //var ball = Crafty.e("Boxik, 2D, WebGL, Color")
+      //  .color(0, 0, 0, 0.5)
+      //  .attr({x: 10, y: 200, w: 42, h: 42});
+
+      //var box = Crafty.e('2D, DOM, Color, Motion, Collision')
+      //  .attr({x: 20, y: 20, w: 100, h: 100})
+      //  .color('blue')
+      //  .checkHits('Boundary')
+      //  .bind('HitOn', function(data){
+      //    var velo = this.velocity();
+      //    velo.y > 0 ? velo.y = -100 : velo.y = 100;
+      //  })
+      //  .velocity().y = 100;
+
+      //Crafty.e('Boundary, 2D, Canvas, Color')
+      //  .attr({x: 0, y: 0, w: 250, h: 10})
+      //  .color('brown');
+
+      //Crafty.e('Boundary, 2D, Canvas, Color')
+      //  .attr({x: 0, y: 250, w: 250, h: 10})
+      //  .color('brown');
+
+      //Crafty.e('Boundary, 2D, Canvas, Color')
+      //  .attr({x: 240, y: 0, w: 10, h: 250})
+      //  .color('brown')
+      //  //.checkHits('Boundary')
+      //  //.bind('HitOn', function(){
+      //  //  //Crafty.log('HitOn');
+      //  //})
+      //  //.multiway(150, {UP_ARROW: -90, DOWN_ARROW: 90, RIGHT_ARROW: -90, LEFT_ARROW: 90})
+      //  //.bind('Moved', function(){
+      //  //  //Crafty.log('Moved');
+      //  //});
+
+      //Crafty.e('Boundary, 2D, Canvas, Color')
+      //  .attr({x: 0, y: 0, w: 10, h: 250})
+      //  .color('brown')
+
+      // Did not work
+      //var jumper = Crafty.e('2D, DOM, Jumper, Color')
+      //  .attr({x: 200, y: 200, w: 10, h: 10})
+      //  .color('green')
+      //  .jumper(300, ['UP_ARROW', 'w'])
+      //  .enableControl();
+    </script>
+  </body>
+</html>
